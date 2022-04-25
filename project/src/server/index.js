@@ -8,7 +8,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const app = express();
-const port = 3000;
+const port = 5300;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -36,10 +36,9 @@ app.get("/rover", async (req, res) => {
   try {
     const { name } = req.query;
     let photos = await fetch(
-      `https://api.nasa.gov/mars-photos/api/v1/rovers/${name}/latest_photos?api_key=${process.env.API_KEY}&`
+      `https://api.nasa.gov/mars-photos/api/v1/rovers/${name}/latest_photos?api_key=${process.env.API_KEY}`
     ).then((res) => res.json());
 
-    console.log(photos);
     res.send({ photos });
   } catch (err) {
     console.log("error:", err);
