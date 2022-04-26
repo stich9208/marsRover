@@ -103,7 +103,7 @@ const EachRovers = (rover) => {
 
 const getRoverPhoto = async (rover) => {
   let photoName = `${rover}_photos`;
-  let photos = await fetch(`http://localhost:3400/rover?name=${rover}`).then(
+  let photos = await fetch(`http://localhost:3000/rover?name=${rover}`).then(
     (res) => res.json()
   );
   updateStore(store, { [photoName]: photos });
