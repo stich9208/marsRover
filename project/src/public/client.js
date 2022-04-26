@@ -1,7 +1,6 @@
 const root = document.getElementById("root");
 
 let store = {
-  apod: "",
   rovers: ["Perseverance", "Curiosity", "Opportunity", "Spirit"],
   currentPath: "/",
 };
@@ -11,6 +10,9 @@ const updateStore = (store, newState) => {
   store = Object.assign(store, newState);
   render(root, store);
 };
+
+// const a = Map({ a: 1, b: 2 });
+// console.log(a);
 
 window.clickRoute = (path) => {
   window.history.pushState({}, path, window.location.origin + path);
@@ -23,7 +25,7 @@ const render = async (root, state) => {
 
 // create content
 const App = (state) => {
-  let { rovers, apod, currentPath } = state;
+  let { rovers, currentPath } = state;
 
   console.log(state);
 
@@ -58,42 +60,52 @@ const Home = (rovers) => {
   let html = "";
   rovers.map(
     (rover) =>
-      (html += `<li class="roverLink" onclick=clickRoute('/${rover.toLowerCase()}')>${rover} /</li>`)
+      (html += `<li class="roverLink" onclick=clickRoute('/${rover.toLowerCase()}')>🚀 ${rover}</li>`)
   );
-  return `<ul class="roverList">${html}</ul>`;
+  return store.currentPath === "/"
+    ? `
+  <h3>👉 pick rover!</h3>
+  <br>
+  <ul class="roverList">${html}</ul>`
+    : `
+  <h3><a href="/" class="homeLink">🏠 go back Home</a></h3>
+  <br>
+  <ul class="roverList">${html}</ul>`;
 };
 
 const EachRovers = (rover) => {
   const photoName = `${rover}_photos`;
   let html = "";
+  let roverHtml = "";
   if (!store[photoName]) {
     getRoverPhoto(rover);
     return `<h1>Loading...</h1>`;
   } else {
     const { latest_photos } = store[photoName].photos;
+    const roverInfo = latest_photos[0].rover;
     latest_photos.map((photo) => {
       html += `<img class="image" src=${photo.img_src} />`;
     });
+    for (const [key, value] of Object.entries(roverInfo)) {
+      if (key !== "id" && key !== "name")
+        roverHtml += `<li class="eachRoverInfo"><span class="roverInfoKey">${key} : </span><span>${value}</span></li>`;
+    }
+    roverHtml += `<li class="eachRoverInfo"><span class="roverInfoKey">photo_date : </span><span>${latest_photos[0].earth_date}</span></li>`;
     return `${Home(store.rovers)}
-    <h2>${rover}</h2>
+    <hr>
+    <h2 class="roverName">🛰 ${rover} 🛰</h2>
+    <br>
+    <ul class="roverInfoList">${roverHtml}</ul>
+    <br>
     <div class="grid">${html}</div>`;
   }
 };
 
 // ------------------------------------------------------  API CALLS
 
-const getImageOfTheDay = (state) => {
-  let { apod } = state;
-
-  if (!apod)
-    fetch(`http://localhost:5300/apod`)
-      .then((res) => res.json())
-      .then((apod) => updateStore(store, { apod }));
-};
-
 const getRoverPhoto = async (rover) => {
   let photoName = `${rover}_photos`;
-  let photos = await fetch(`http://localhost:5300/rover?name=${rover}`).then(
+  let photos = await fetch(`http://localhost:3400/rover?name=${rover}`).then(
     (res) => res.json()
   );
   updateStore(store, { [photoName]: photos });
