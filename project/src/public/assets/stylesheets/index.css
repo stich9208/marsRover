@@ -5,6 +5,8 @@ body {
   flex-direction: column;
   font-family: Arial;
   min-height: 100vh;
+  overflow: auto;
+  z-index: 99;
 }
 
 header {
@@ -53,6 +55,34 @@ main .eachRoverInfo {
 
 main .roverInfoKey {
   font-weight: bold;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+  z-index: -1;
+  overflow: hidden;
+}
+
+@keyframes falling {
+  to {
+    transform: translate(105vw, 105vh) rotateX(180deg) rotate(90deg)
+      skew(20deg, 10deg);
+  }
+}
+
+.fall {
+  position: absolute;
+  top: -60px;
+  font-size: 60px;
+  opacity: 0.8;
+  transform: rotateX(180deg) rotate(90deg) skew(20deg, 10deg);
+  animation: falling 5s linear forwards;
+  z-index: 9;
 }
 
 li.roverLink {

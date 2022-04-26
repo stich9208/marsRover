@@ -64,6 +64,7 @@ const Home = (rovers) => {
   );
   return store.currentPath === "/"
     ? `
+  <div class="background"></div>
   <h3>👉 pick rover!</h3>
   <br>
   <ul class="roverList">${html}</ul>`
@@ -110,3 +111,16 @@ const getRoverPhoto = async (rover) => {
   );
   updateStore(store, { [photoName]: photos });
 };
+
+const createElement = () => {
+  const back = document.getElementsByClassName("background")[0];
+  const elem = document.createElement("i");
+  elem.innerHTML = "☄️";
+  elem.classList.add("fall");
+  elem.style.left = Math.random() * window.innerWidth - 60 + "px";
+  back.appendChild(elem);
+
+  setTimeout(() => elem.remove(), 5000);
+};
+
+if (store.currentPath === "/") setInterval(createElement, 1000);
