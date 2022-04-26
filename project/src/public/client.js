@@ -11,9 +11,6 @@ const updateStore = (store, newState) => {
   render(root, store);
 };
 
-// const a = Map({ a: 1, b: 2 });
-// console.log(a);
-
 window.clickRoute = (path) => {
   window.history.pushState({}, path, window.location.origin + path);
   updateStore(store, { currentPath: window.location.pathname });
@@ -112,15 +109,15 @@ const getRoverPhoto = async (rover) => {
   updateStore(store, { [photoName]: photos });
 };
 
-const createElement = () => {
+const createAsteroid = () => {
   const back = document.getElementsByClassName("background")[0];
-  const elem = document.createElement("i");
-  elem.innerHTML = "☄️";
-  elem.classList.add("fall");
-  elem.style.left = Math.random() * window.innerWidth - 60 + "px";
-  back.appendChild(elem);
+  const asteroid = document.createElement("i");
+  asteroid.innerHTML = "☄️";
+  asteroid.classList.add("fall");
+  asteroid.style.left = Math.random() * window.innerWidth - 60 + "px";
+  back.appendChild(asteroid);
 
-  setTimeout(() => elem.remove(), 5000);
+  setTimeout(() => asteroid.remove(), 5000);
 };
 
 if (store.currentPath === "/") setInterval(createElement, 1000);
