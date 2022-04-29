@@ -19,7 +19,7 @@ app.use("/", express.static(path.join(__dirname, "../public")));
 app.get("/rover", async (req, res) => {
   try {
     const { name } = req.query;
-    let photos = await fetch(
+    const photos = await fetch(
       `https://api.nasa.gov/mars-photos/api/v1/rovers/${name}/latest_photos?api_key=${process.env.API_KEY}`
     ).then((res) => res.json());
 

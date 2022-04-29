@@ -24,8 +24,6 @@ const render = async (root, state) => {
 const App = (state) => {
   let { rovers, currentPath } = state;
 
-  console.log(state);
-
   switch (currentPath) {
     case "/":
       return Template(Home(rovers));
@@ -80,7 +78,7 @@ const EachRovers = (rover) => {
     getRoverPhoto(rover);
     return `<h1>Loading...</h1>`;
   } else {
-    const { latest_photos } = store[photoName].photos;
+    const { latest_photos } = store[photoName].get("photos");
     const roverInfo = latest_photos[0].rover;
     latest_photos.map((photo) => {
       html += `<img class="image" src=${photo.img_src} />`;
@@ -103,11 +101,13 @@ const EachRovers = (rover) => {
 // ------------------------------------------------------  API CALLS
 
 const getRoverPhoto = async (rover) => {
-  let photoName = `${rover}_photos`;
-  let photos = await fetch(`http://localhost:3000/rover?name=${rover}`).then(
+  const photoName = `${rover}_photos`;
+  const photos = await fetch(`http://localhost:3000/rover?name=${rover}`).then(
     (res) => res.json()
   );
-  updateStore(store, { [photoName]: photos });
+  console.log(photos);
+  const ImmutablePhotos = Immutable.Map(photos);
+  updateStore(store, { [photoName]: ImmutablePhotos });
 };
 
 const createAsteroid = () => {
@@ -115,10 +115,14 @@ const createAsteroid = () => {
   const asteroid = document.createElement("i");
   asteroid.innerHTML = "☄️";
   asteroid.classList.add("fall");
-  asteroid.style.left = Math.random() * window.innerWidth - 60 + "px";
+  asteroid.style.left =
+    Math.random() * window.innerWidth -
+    60 +
+    (0 - (Math.random() * window.innerWidth - 60)) +
+    "px";
   back.appendChild(asteroid);
 
   setTimeout(() => asteroid.remove(), 5000);
 };
 
-if (store.currentPath === "/") setInterval(createElement, 1000);
+// if (store.currentPath === "/") setInterval(createAsteroid, 200);
