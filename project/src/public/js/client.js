@@ -111,18 +111,20 @@ const getRoverPhoto = async (rover) => {
 };
 
 const createAsteroid = () => {
-  const back = document.getElementsByClassName("background")[0];
-  const asteroid = document.createElement("i");
-  asteroid.innerHTML = "☄️";
-  asteroid.classList.add("fall");
-  asteroid.style.left =
-    Math.random() * window.innerWidth -
-    60 +
-    (0 - (Math.random() * window.innerWidth - 60)) +
-    "px";
-  back.appendChild(asteroid);
+  if (store.currentPath === "/") {
+    const back = document.getElementsByClassName("background")[0];
+    const asteroid = document.createElement("i");
+    asteroid.innerHTML = "☄️";
+    asteroid.classList.add("fall");
+    asteroid.style.left =
+      Math.random() * window.innerWidth -
+      60 +
+      (0 - (Math.random() * window.innerWidth - 60)) +
+      "px";
+    back.appendChild(asteroid);
 
-  setTimeout(() => asteroid.remove(), 5000);
+    setTimeout(() => asteroid.remove(), 5000);
+  }
 };
 
-// if (store.currentPath === "/") setInterval(createAsteroid, 200);
+if (store.currentPath === "/") setInterval(createAsteroid, 200);
